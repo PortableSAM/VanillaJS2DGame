@@ -1,15 +1,17 @@
 const canvas = document.getElementById('can');
-let ctx = canvas.getContext("2d");
+let ctx = canvas.getContext('2d');
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
 let ballRadius = 10;
 const paddleHeight = 10,
-    paddleWidth = 75;
+	paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
 let rightPressed = false;
 let leftPressed = false;
+document.addEventListener('keydown', keyDownHandler, false);
+document.addEventListener('keyup', keyUpHandler, false);
 /*
 ctx.beginPath();
 ctx.rect(20, 40, 50, 50); //rect를 이용하여 직사각형 정의
@@ -36,34 +38,55 @@ ctx.closePath();
 */
 
 function drawball() {
-    // drawing code
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = '#303952';
-    ctx.fill();
-    ctx.closePath();
+	// drawing code
+	ctx.beginPath();
+	ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+	ctx.fillStyle = '#e74c3c';
+	ctx.fill();
+	ctx.closePath();
 }
 
 function drawPaddle() {
-    ctx.beginPath();
-    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#f78fb3";
-    ctx.fill();
-    ctx.closePath();
+	ctx.beginPath();
+	ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+	ctx.fillStyle = '#f78fb3';
+	ctx.fill();
+	ctx.closePath();
 }
 
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawball();
-    x += dx;
-    y += dy;
-    if (x + dy > canvas.width || x + dy < 0) {
-        dx = -dx;
-    }
-    if (y + dy > canvas.height || y + dy < 0) {
-        dy = -dy;
-    }
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	drawball();
+	drawPaddle();
+	if (x + dy > canvas.width || x + dy < 0) {
+		dx = -dx;
+	}
+	if (y + dy > canvas.height || y + dy < 0) {
+		dy = -dy;
+	}
+	if (rightPressed && paddleX < canvas.width - paddleWidth) {
+		paddleX += 7;
+	}
+	if (leftPressed && paddleX > 0) {
+		paddleX -= 7;
+	}
+	x += dx;
+	y += dy;
 }
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
+
+function keyDownHandler(e) {
+	if (e.keyCode == 39) {
+		rightPressed = true;
+	} else if (e.keyCode == 37) {
+		leftPressed = true;
+	}
+}
+
+function keyUpHandler(e) {
+	if (e.keyCode == 39) {
+		rightPressed = false;
+	} else if (e.keyCode == 37) {
+		leftPressed = false;
+	}
+}
 setInterval(draw, 10);
