@@ -5,6 +5,11 @@ let y = canvas.height - 30;
 let dx = 2;
 let dy = -2;
 let ballRadius = 10;
+const paddleHeight = 10,
+    paddleWidth = 75;
+let paddleX = (canvas.width - paddleWidth) / 2;
+let rightPressed = false;
+let leftPressed = false;
 /*
 ctx.beginPath();
 ctx.rect(20, 40, 50, 50); //rect를 이용하여 직사각형 정의
@@ -39,6 +44,13 @@ function drawball() {
     ctx.closePath();
 }
 
+function drawPaddle() {
+    ctx.beginPath();
+    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    ctx.fillStyle = "#f78fb3";
+    ctx.fill();
+    ctx.closePath();
+}
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -52,5 +64,6 @@ function draw() {
         dy = -dy;
     }
 }
-
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
 setInterval(draw, 10);
